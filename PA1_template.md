@@ -1,14 +1,10 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-author: Steve Kaiser (https://github.com/smkaiser)
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
+Steve Kaiser (https://github.com/smkaiser)  
 
 
 ## Loading and preprocessing the data
-```{r}
+
+```r
 # load libraries
 library(lubridate)
 library(ggplot2)
@@ -20,13 +16,12 @@ if (!file.exists("./activity.csv")) {
 }
 fileinfo <- file.info("./activity.csv")
 activity <- read.csv("./activity.csv", colClasses = c("integer", "Date", "integer"))
-
-
 ```
-Data file last modified: `r fileinfo$mtime` (local time)
+Data file last modified: 2014-02-11 10:08:20 (local time)
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 # ignore missing (NA) values
 histdata <- activity[!is.na(activity$steps),]
 steptotals = aggregate(histdata$steps, list(histdata$date), FUN = sum)
@@ -39,9 +34,11 @@ ggplot(steptotals, aes(x = x)) + geom_histogram(fill="#4080F0", color="black", b
     ggtitle("Histogram of number of steps per day")
 ```
 
-Mean steps per day: **`r stepmean`**
+![plot of chunk unnamed-chunk-2](./PA1_template_files/figure-html/unnamed-chunk-2.png) 
 
-Median steps per day: **`r stepmedian`**
+Mean steps per day: **10766**
+
+Median steps per day: **10765**
 
 ## What is the average daily activity pattern?
 
