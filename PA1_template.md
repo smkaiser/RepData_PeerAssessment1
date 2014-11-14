@@ -42,7 +42,21 @@ Median steps per day: **10765**
 
 ## What is the average daily activity pattern?
 
+```r
+# Group the mean total steps by 5-minute intervals 
+intervalsteps = aggregate(histdata$steps, list(histdata$interval), FUN=mean)
+# Convert interval to a real time value
+names(intervalsteps) = c("Interval", "MeanSteps")
+intervalsteps$Time <- parse_date_time(sprintf("%04d", intervalsteps$Interval), "hm")
+# Find the interval with the highest avg steps
+maxinterval = intervalsteps[intervalsteps$MeanSteps == max(intervalsteps$MeanSteps),2:3]
+# Plot the time series
+plot(intervalsteps$Time, intervalsteps$MeanSteps, xlab = "5 minute interval starting at time", ylab="Mean number of steps during interval", main="Daily activity pattern")
+```
 
+![plot of chunk unnamed-chunk-3](./PA1_template_files/figure-html/unnamed-chunk-3.png) 
+
+The 5-minute interval with the highest average steps starts at **08:35 AM**, with **206.1698** steps.
 
 ## Imputing missing values
 
