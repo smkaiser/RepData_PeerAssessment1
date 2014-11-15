@@ -18,7 +18,7 @@ if (!file.exists("./activity.csv")) {
 fileinfo <- file.info("./activity.csv")
 activity <- read.csv("./activity.csv", colClasses = c("integer", "Date", "integer"))
 ```
-Data file last modified: 2014-02-11 10:08:20 (local time)
+Data file last modified: **2014-02-11 10:08:20** (local time)
 
 ## What is the mean total number of steps taken per day?
 
@@ -102,10 +102,10 @@ Median steps per day (imputed): **10766**
 
 ```r
 is_weekday <- function(s) {
-    ifelse (s %in% c("Sat", "Sun", "Saturday", "Sunday"), "Weekend", "Weekday") 
+    ifelse (wday(s)==1 | wday(s) == 7, "Weekend", "Weekday")
 }
 # Add a column that indicates whether the date is weekday or weekend day
-newdata$weekday <- factor(is_weekday(weekdays(newdata$date)))
+newdata$weekday <- factor(is_weekday(newdata$date))
 intervalsteps = aggregate(newdata$steps, list(newdata$interval, newdata$weekday), FUN=mean)
 # Convert interval to a real time value
 names(intervalsteps) = c("Interval", "Weekday", "MeanSteps")

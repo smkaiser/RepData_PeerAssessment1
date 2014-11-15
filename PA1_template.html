@@ -70,7 +70,7 @@ if (!file.exists(&quot;./activity.csv&quot;)) {
 }
 fileinfo &lt;- file.info(&quot;./activity.csv&quot;)
 activity &lt;- read.csv(&quot;./activity.csv&quot;, colClasses = c(&quot;integer&quot;, &quot;Date&quot;, &quot;integer&quot;))</code></pre>
-<p>Data file last modified: 2014-02-11 10:08:20 (local time)</p>
+<p>Data file last modified: <strong>2014-02-11 10:08:20</strong> (local time)</p>
 </div>
 <div id="what-is-the-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is the mean total number of steps taken per day?</h2>
@@ -138,10 +138,10 @@ ggplot(steptotals, aes(x = x)) + geom_histogram(fill=&quot;#4080F0&quot;, color=
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 <pre class="r"><code>is_weekday &lt;- function(s) {
-    ifelse (s %in% c(&quot;Sat&quot;, &quot;Sun&quot;, &quot;Saturday&quot;, &quot;Sunday&quot;), &quot;Weekend&quot;, &quot;Weekday&quot;) 
+    ifelse (wday(s)==1 | wday(s) == 7, &quot;Weekend&quot;, &quot;Weekday&quot;)
 }
 # Add a column that indicates whether the date is weekday or weekend day
-newdata$weekday &lt;- factor(is_weekday(weekdays(newdata$date)))
+newdata$weekday &lt;- factor(is_weekday(newdata$date))
 intervalsteps = aggregate(newdata$steps, list(newdata$interval, newdata$weekday), FUN=mean)
 # Convert interval to a real time value
 names(intervalsteps) = c(&quot;Interval&quot;, &quot;Weekday&quot;, &quot;MeanSteps&quot;)

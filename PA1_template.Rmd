@@ -101,10 +101,10 @@ Median steps per day (imputed): **`r stepmedian`**
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
 is_weekday <- function(s) {
-    ifelse (s %in% c("Sat", "Sun", "Saturday", "Sunday"), "Weekend", "Weekday") 
+    ifelse (wday(s)==1 | wday(s) == 7, "Weekend", "Weekday")
 }
 # Add a column that indicates whether the date is weekday or weekend day
-newdata$weekday <- factor(is_weekday(weekdays(newdata$date)))
+newdata$weekday <- factor(is_weekday(newdata$date))
 intervalsteps = aggregate(newdata$steps, list(newdata$interval, newdata$weekday), FUN=mean)
 # Convert interval to a real time value
 names(intervalsteps) = c("Interval", "Weekday", "MeanSteps")
