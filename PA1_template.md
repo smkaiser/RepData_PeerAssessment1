@@ -1,5 +1,4 @@
 # Reproducible Research: Peer Assessment 1
-Steve Kaiser (https://github.com/smkaiser)  
 
 
 
@@ -18,7 +17,7 @@ if (!file.exists("./activity.csv")) {
 fileinfo <- file.info("./activity.csv")
 activity <- read.csv("./activity.csv", colClasses = c("integer", "Date", "integer"))
 ```
-Data file last modified: **2014-02-11 10:08:20** (local time)
+activity.csv file last modified: **2014-02-11 10:08:20** (local time)
 
 ## What is the mean total number of steps taken per day?
 
@@ -54,7 +53,6 @@ intervalsteps$Time <- parse_date_time(sprintf("%04d", intervalsteps$Interval), "
 # Find the interval with the highest avg steps
 maxinterval = intervalsteps[intervalsteps$MeanSteps == max(intervalsteps$MeanSteps),2:3]
 # Plot the time series
-#plot(intervalsteps$Time, intervalsteps$MeanSteps, xlab = "Starting time of 5 minute interval", ylab="Mean number of steps during interval", main="Daily activity pattern")
 ggplot(intervalsteps, aes(x=Time, y=MeanSteps)) + 
     geom_point() + 
     scale_x_datetime(labels = date_format("%H:%M")) +
@@ -102,10 +100,12 @@ Median steps per day (imputed): **10766**
 
 ```r
 is_weekday <- function(s) {
+    # Day 1 and 7 are Sunday and Saturday
     ifelse (wday(s)==1 | wday(s) == 7, "Weekend", "Weekday")
 }
 # Add a column that indicates whether the date is weekday or weekend day
 newdata$weekday <- factor(is_weekday(newdata$date))
+# Group by 5-minute interval and whether date is a weekday
 intervalsteps = aggregate(newdata$steps, list(newdata$interval, newdata$weekday), FUN=mean)
 # Convert interval to a real time value
 names(intervalsteps) = c("Interval", "Weekday", "MeanSteps")
@@ -113,7 +113,6 @@ intervalsteps$Time <- parse_date_time(sprintf("%04d", intervalsteps$Interval), "
 # Find the interval with the highest avg steps
 maxinterval = intervalsteps[intervalsteps$MeanSteps == max(intervalsteps$MeanSteps),2:3]
 # Plot the time series
-#plot(intervalsteps$Time, intervalsteps$MeanSteps, xlab = "Starting time of 5 minute interval", ylab="Mean number of steps during interval", main="Daily activity pattern")
 ggplot(intervalsteps, aes(x=Time, y=MeanSteps)) + 
     geom_point() + 
     scale_x_datetime(labels = date_format("%H:%M")) +

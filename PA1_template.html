@@ -8,7 +8,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Steve Kaiser (https://github.com/smkaiser)" />
 
 
 <title>Reproducible Research: Peer Assessment 1</title>
@@ -53,7 +52,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="header">
 <h1 class="title">Reproducible Research: Peer Assessment 1</h1>
-<h4 class="author"><em>Steve Kaiser (<a href="https://github.com/smkaiser">https://github.com/smkaiser</a>)</em></h4>
 </div>
 
 
@@ -70,7 +68,7 @@ if (!file.exists(&quot;./activity.csv&quot;)) {
 }
 fileinfo &lt;- file.info(&quot;./activity.csv&quot;)
 activity &lt;- read.csv(&quot;./activity.csv&quot;, colClasses = c(&quot;integer&quot;, &quot;Date&quot;, &quot;integer&quot;))</code></pre>
-<p>Data file last modified: <strong>2014-02-11 10:08:20</strong> (local time)</p>
+<p>activity.csv file last modified: <strong>2014-02-11 10:08:20</strong> (local time)</p>
 </div>
 <div id="what-is-the-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is the mean total number of steps taken per day?</h2>
@@ -100,7 +98,6 @@ intervalsteps$Time &lt;- parse_date_time(sprintf(&quot;%04d&quot;, intervalsteps
 # Find the interval with the highest avg steps
 maxinterval = intervalsteps[intervalsteps$MeanSteps == max(intervalsteps$MeanSteps),2:3]
 # Plot the time series
-#plot(intervalsteps$Time, intervalsteps$MeanSteps, xlab = &quot;Starting time of 5 minute interval&quot;, ylab=&quot;Mean number of steps during interval&quot;, main=&quot;Daily activity pattern&quot;)
 ggplot(intervalsteps, aes(x=Time, y=MeanSteps)) + 
     geom_point() + 
     scale_x_datetime(labels = date_format(&quot;%H:%M&quot;)) +
@@ -138,10 +135,12 @@ ggplot(steptotals, aes(x = x)) + geom_histogram(fill=&quot;#4080F0&quot;, color=
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 <pre class="r"><code>is_weekday &lt;- function(s) {
+    # Day 1 and 7 are Sunday and Saturday
     ifelse (wday(s)==1 | wday(s) == 7, &quot;Weekend&quot;, &quot;Weekday&quot;)
 }
 # Add a column that indicates whether the date is weekday or weekend day
 newdata$weekday &lt;- factor(is_weekday(newdata$date))
+# Group by 5-minute interval and whether date is a weekday
 intervalsteps = aggregate(newdata$steps, list(newdata$interval, newdata$weekday), FUN=mean)
 # Convert interval to a real time value
 names(intervalsteps) = c(&quot;Interval&quot;, &quot;Weekday&quot;, &quot;MeanSteps&quot;)
@@ -149,7 +148,6 @@ intervalsteps$Time &lt;- parse_date_time(sprintf(&quot;%04d&quot;, intervalsteps
 # Find the interval with the highest avg steps
 maxinterval = intervalsteps[intervalsteps$MeanSteps == max(intervalsteps$MeanSteps),2:3]
 # Plot the time series
-#plot(intervalsteps$Time, intervalsteps$MeanSteps, xlab = &quot;Starting time of 5 minute interval&quot;, ylab=&quot;Mean number of steps during interval&quot;, main=&quot;Daily activity pattern&quot;)
 ggplot(intervalsteps, aes(x=Time, y=MeanSteps)) + 
     geom_point() + 
     scale_x_datetime(labels = date_format(&quot;%H:%M&quot;)) +
